@@ -94,6 +94,27 @@ exports.handler = async function(event) {
     returnValue.sections.push(sectionObject)
 
     // 🔥 your code for the reviews/ratings goes here
+
+    //ask Firebase for the reviews for the specific section (Retrieve Subset??)
+    let reviewQuery = await db.collection('reviews').where('sectionId', '==', sectionId).get()
+
+    //get the total number of reviews for the section
+    reviewQuery.size
+
+    //get the data
+    let reviews = reviewQuery.docs
+
+    //for all the reviews for the sections, loop through the data, sum the ratings, and divide by the total number of reviews
+    for (let j=0; j<reviews.length; j++) {
+      let reviewId = reviews[j].id // get the document ID of the item for use later
+      let review = reviews[j].data() // each member of the docs Array is a reference, so use .data() to get it into an Object
+      review.body // => e.g. 'grapes'
+     
+    }
+    console.log(reviews)
+   
+    //add the reviews to the section object 
+    //send to the return value
   }
 
   // return the standard response
