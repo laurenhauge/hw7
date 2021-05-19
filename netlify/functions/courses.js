@@ -104,17 +104,29 @@ exports.handler = async function(event) {
     //get the data
     let reviews = reviewQuery.docs
 
+    //make it an array in here 
+    sectionObject.reviews = []
+
     //for all the reviews for the sections, loop through the data, sum the ratings, and divide by the total number of reviews
     for (let j=0; j<reviews.length; j++) {
       let reviewId = reviews[j].id // get the document ID of the item for use later
-      let review = reviews[j].data() // each member of the docs Array is a reference, so use .data() to get it into an Object
-      review.body // => e.g. 'grapes'
-     
+      let reviewObject = reviews[j].data() // each member of the docs Array is a reference, so use .data() to get it into an Object
+      
+      // console.log(reviewObject)
+
+      //send to the return value
+      sectionObject.reviews.push(reviewObject)
+      
     }
-    console.log(reviews)
-   
-    //add the reviews to the section object 
-    //send to the return value
+  // name a property on the section object for number of reviews 
+  // console.log(numResults)
+  sectionObject.numReviews = reviews.length
+
+  //create variable to store sum 
+  
+  //
+    
+    
   }
 
   // return the standard response
