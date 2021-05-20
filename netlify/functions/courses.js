@@ -58,7 +58,7 @@ exports.handler = async function(event) {
   // create an object with the course data to hold the return value from our lambda
   let returnValue = {
     courseNumber: courseData.courseNumber,
-    name: courseData.name
+    name: courseData.name 
   }
 
   // set a new Array as part of the return value
@@ -95,7 +95,7 @@ exports.handler = async function(event) {
 
     // 🔥 your code for the reviews/ratings goes here
 
-    //ask Firebase for the reviews for the specific section (Retrieve Subset??)
+    //ask Firebase for the reviews for the specific section 
     let reviewQuery = await db.collection('reviews').where('sectionId', '==', sectionId).get()
 
     //get the total number of reviews for the section
@@ -118,16 +118,32 @@ exports.handler = async function(event) {
       sectionObject.reviews.push(reviewObject)
       
     }
-  // name a property on the section object for number of reviews 
-  // console.log(numResults)
-  sectionObject.numReviews = reviews.length
+    // name a property on the section object for number of reviews 
+    sectionObject.numberOfReviews = reviews.length
+    
+    //Set a variable to hold the total sum of all the reviews
+    let reviewSum = 0
+    for (let k = 0; k < sectionObject.reviews.length; k++) {
+      reviewSum += sectionObject.reviews[k].rating;
+    }
+    let reviewAvg = reviewSum / sectionObject.reviews.length
+    // console.log(reviewAvg)
 
-  //create variable to store sum 
-  
-  //
-    
-    
+    //name a property on the section object for the average
+    sectionObject.averageRating = reviewAvg 
+
   }
+  let totalReviews = 0
+  let courseAverage = 0
+  for (let l=0; l < returnValue.sections.length; l++){
+    totalReviews += returnValue.sections[l].numberOfReviews;
+    courseAverage += returnValue.sections[l].averageRating;
+  }
+  courseAverage = courseAverage / returnValue.sections.length
+  // console.log(courseAverage)
+  returnValue.totalReviews = totalReviews
+  returnValue.courseAverage = courseAverage
+
 
   // return the standard response
   return {
